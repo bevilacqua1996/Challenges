@@ -1,8 +1,6 @@
 package bevilacqua1996.challenges;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -10,6 +8,7 @@ public class Main {
     public static void main(String[] args) {
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
+    }
 
 }
 
@@ -72,7 +71,7 @@ class RandomizedSet {
     }
 
     public boolean insert(int val) {
-        if(set.contains(val)) {
+        if (set.contains(val)) {
             return false;
         } else {
             set.add(val);
@@ -81,7 +80,7 @@ class RandomizedSet {
     }
 
     public boolean remove(int val) {
-        if(!set.contains(val)) {
+        if (!set.contains(val)) {
             return false;
         } else {
             set.remove(val);
