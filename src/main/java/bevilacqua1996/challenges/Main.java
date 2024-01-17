@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        WiggleSort wiggleSort =  new WiggleSort();
-        wiggleSort.wiggleSort(new int[]{1,3,2,2,3,1});
+        LongestPalindromicSubstring longestPalindromicSubstring = new LongestPalindromicSubstring();
+        System.out.println(longestPalindromicSubstring.longestPalindrome("cbbd"));
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
@@ -33,6 +33,68 @@ class WiggleSort {
             }
         }
 
+    }
+}
+
+class LongestPalindromicSubstring {
+    public String longestPalindrome(String str) {
+
+        if (str == null || str.length() == 0) {
+            return "";
+        }
+
+        // Transforma a string original adicionando caracteres '#' entre cada caractere
+        String processada = preProcessar(str);
+
+        int n = processada.length();
+        int[] p = new int[n];  // Array para armazenar os tamanhos dos palíndromos centrados em cada posição
+        int centro = 0;        // Posição do centro do palíndromo atual
+        int direita = 0;       // Extensão à direita do palíndromo atual
+
+        for (int i = 0; i < n; i++) {
+            int espelho = 2 * centro - i;
+
+            // Calcula o tamanho do palíndromo centrado em i
+            if (i < direita) {
+                p[i] = Math.min(direita - i, p[espelho]);
+            } else {
+                p[i] = 0;
+            }
+
+            // Expande o palíndromo centrado em i
+            while (i + p[i] + 1 < n && i - p[i] - 1 >= 0 && processada.charAt(i + p[i] + 1) == processada.charAt(i - p[i] - 1)) {
+                p[i]++;
+            }
+
+            // Atualiza o centro e a extensão à direita, se necessário
+            if (i + p[i] > direita) {
+                centro = i;
+                direita = i + p[i];
+            }
+        }
+
+        // Encontra a posição e tamanho do maior palíndromo
+        int maxPos = 0;
+        int maxTam = 0;
+        for (int i = 0; i < n; i++) {
+            if (p[i] > maxTam) {
+                maxTam = p[i];
+                maxPos = i;
+            }
+        }
+
+        // Recupera o maior palíndromo original da string processada
+        int inicio = (maxPos - maxTam) / 2;
+        return str.substring(inicio, inicio + maxTam);
+
+    }
+
+    private static String preProcessar(String str) {
+        StringBuilder sb = new StringBuilder("#");
+        for (char c : str.toCharArray()) {
+            sb.append(c).append("#");
+        }
+        return sb.toString();
     }
 }
 
