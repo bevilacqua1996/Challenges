@@ -1,13 +1,62 @@
 package bevilacqua1996.challenges;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
+        WiggleSort wiggleSort =  new WiggleSort();
+        wiggleSort.wiggleSort(new int[]{1,3,2,2,3,1});
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
+    }
+
+}
+
+class WiggleSort {
+    public void wiggleSort(int[] nums) {
+        int[] arrayCopy = nums.clone();
+
+        Arrays.sort(arrayCopy);
+
+        int n = nums.length;
+        int middle = (n-1)/2;
+        int end = (n-1);
+
+        for(int i=0; i<n; i++) {
+            if(i%2==0) {
+                nums[i] = arrayCopy[middle--];
+            } else {
+                nums[i] = arrayCopy[end--];
+            }
+        }
+
+    }
+}
+
+class UniqueOccurrences {
+
+    public boolean uniqueOccurrences(int[] arr) {
+        Integer[] integerArray = Arrays.stream(arr).boxed().toArray(Integer[]::new);
+        Set<Integer> setTest = new HashSet<>();
+        List<Integer> occurrences = new ArrayList<>();
+        Map<Integer, Integer> numbersAndOccurrences = new HashMap<>();
+
+        for (Integer element : integerArray) {
+            numbersAndOccurrences.put(element, numbersAndOccurrences.getOrDefault(element, 0) + 1);
+        }
+
+        numbersAndOccurrences.forEach((element, quantity) -> occurrences.add(quantity));
+
+        for(Integer occurrence : occurrences) {
+            if(!setTest.add(occurrence)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }
