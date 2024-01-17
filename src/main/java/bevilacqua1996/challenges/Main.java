@@ -1,18 +1,57 @@
 package bevilacqua1996.challenges;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        LongestPalindromicSubstring longestPalindromicSubstring = new LongestPalindromicSubstring();
-        System.out.println(longestPalindromicSubstring.longestPalindrome("cbbd"));
+        StringAlike stringAlike = new StringAlike();
+        System.out.println(stringAlike.halvesAreAlike("textbook"));
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class StringAlike {
+    public boolean halvesAreAlike(String s) {
+        int n = s.length();
+        int middle = n/2;
+
+        int vowelsA = 0;
+        int vowelsB = 0;
+
+        String a = s.substring(0, middle);
+        String b = s.substring(middle, n);
+
+        for(int i=0; i<a.length(); i++) {
+            if(checkVowels(a.charAt(i))) {
+                vowelsA ++;
+            }
+        }
+
+        for(int i=0; i<b.length(); i++) {
+            if(checkVowels(b.charAt(i))) {
+                vowelsB ++;
+            }
+        }
+
+        return vowelsB == vowelsA;
+    }
+
+    public boolean checkVowels(char c) {
+        return c == 'a'
+                || c=='e'
+                || c=='i'
+                || c=='o'
+                || c=='u'
+                || c=='A'
+                || c=='E'
+                || c=='I'
+                || c=='O'
+                || c=='U';
+    }
 }
 
 class WiggleSort {
