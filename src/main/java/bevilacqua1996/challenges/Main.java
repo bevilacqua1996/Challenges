@@ -1,17 +1,151 @@
 package bevilacqua1996.challenges;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        StringAlike stringAlike = new StringAlike();
-        System.out.println(stringAlike.halvesAreAlike("textbook"));
+//        System.out.println(JesseAndCookies.cookies(90, new ArrayList<Integer>(
+//                Arrays.asList(13, 47, 74, 12, 89, 74, 18, 38))));
+        LongPrefix longPrefix = new LongPrefix();
+        System.out.println(longPrefix.longestCommonPrefix(new String[]{"ab", "a"}));
+
+
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class LongPrefix {
+    public String longestCommonPrefix(String[] strs) {
+        Map<String, Integer> mapLength = new HashMap<>();
+        if(strs.length == 0) {
+            return "";
+        } else if(strs.length == 1) {
+            return strs[0];
+        }
+        for(int i=0; i<strs.length; i++) {
+            if(strs[i].isEmpty()) {
+                return "";
+            } else {
+                mapLength.put(strs[i], strs[i].length());
+            }
+        }
+        StringBuilder longPrefix = new StringBuilder();
+        int words = strs.length;
+        boolean differentPrefix = false;
+
+        for(int counter=0; counter<Collections.min(mapLength.values()); counter++) {
+            for(int i=1; i<words; i++) {
+                if(strs[i].charAt(counter) != strs[i-1].charAt(counter)) {
+                    differentPrefix = true;
+                    break;
+                } else {
+                    continue;
+                }
+            }
+            if(differentPrefix) {
+                break;
+            }
+            longPrefix.append(strs[0].charAt(counter));
+        }
+
+        return longPrefix.toString();
+    }
+}
+
+class JesseAndCookies {
+    public static int iterations = 0;
+
+    public static int cookies(int k, List<Integer> A) {
+
+        Collections.sort(A);
+
+        recursiveCall(k, A);
+
+        if(A.size()==1 && A.get(0)<k) {
+            return -1;
+        }
+
+        return iterations;
+
+    }
+
+    public static void recursiveCall(int k, List<Integer> sortedList) {
+        if(sortedList.size()==1) {
+            return;
+        } else if(sortedList.get(0)>=k && sortedList.get(1)>=k) {
+            return;
+        } else {
+            Integer newSweetness = sortedList.get(0) + sortedList.get(1)*2;
+
+            sortedList.set(0, newSweetness);
+            sortedList.remove(1);
+
+            iterations++;
+
+            Collections.sort(sortedList);
+
+            recursiveCall(k, sortedList);
+        }
+
+    }
+}
+
+class CaesarCipher {
+    public String caesarCipher(String s, int k) {
+        char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+        Map<Character, Character> cipherMap = new HashMap<>();
+
+        if(k>26) {
+            k = k%26;
+        }
+
+        for(int i=0; i<alphabet.length; i++) {
+            if(i+k > alphabet.length-1) {
+                cipherMap.put(alphabet[i], alphabet[(i+k)-alphabet.length]);
+            } else {
+                cipherMap.put(alphabet[i], alphabet[i+k]);
+            }
+        }
+
+        StringBuilder cipherWord = new StringBuilder();
+
+        for(int i=0; i<s.length(); i++) {
+            if(Character.isUpperCase(s.charAt(i))) {
+                cipherWord.append(Character.toUpperCase(cipherMap.get(Character.toLowerCase(s.charAt(i)))));
+                continue;
+            } else if(!cipherMap.containsKey(s.charAt(i))) {
+                cipherWord.append(s.charAt(i));
+                continue;
+            }
+            cipherWord.append(cipherMap.get(s.charAt(i)));
+        }
+
+        return cipherWord.toString();
+    }
+}
+
+class HoursConversion {
+    public String timeConversion(String s) {
+        // Write your code here
+        int hours = Integer.parseInt(s.substring(0,2));
+        if(s.contains("PM") && hours == 12) {
+            s = s.replace("PM", "");
+        } else if(s.contains("PM")) {
+            String hoursConversion = String.valueOf(hours+12);
+            s = s.replace(s.substring(0,2), hoursConversion).replace("PM", "");
+        } else if(s.contains("AM") && hours == 12) {
+            s = s.replace(s.substring(0,2), "00").replace("AM", "");
+        } else {
+            s = s.replace("AM", "");
+        }
+
+        return s;
+    }
 }
 
 class StringAlike {
