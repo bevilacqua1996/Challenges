@@ -1,7 +1,6 @@
 package bevilacqua1996.challenges;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -9,14 +8,30 @@ public class Main {
     public static void main(String[] args) {
 //        System.out.println(JesseAndCookies.cookies(90, new ArrayList<Integer>(
 //                Arrays.asList(13, 47, 74, 12, 89, 74, 18, 38))));
-        LongPrefix longPrefix = new LongPrefix();
-        System.out.println(longPrefix.longestCommonPrefix(new String[]{"ab", "a"}));
-
 
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class StairsWays {
+    private int ways = 0;
+    public int climbStairs(int n) {
+
+        return fibonnacci(n, 1, 0);
+
+    }
+
+    public int fibonnacci(int index, int next, int current) {
+        if(index==0) {
+            ways = next;
+        } else {
+            fibonnacci(index-1, next+current, next);
+        }
+
+        return ways;
+    }
 }
 
 class LongPrefix {
