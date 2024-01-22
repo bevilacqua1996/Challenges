@@ -9,10 +9,111 @@ public class Main {
 //        System.out.println(JesseAndCookies.cookies(90, new ArrayList<Integer>(
 //                Arrays.asList(13, 47, 74, 12, 89, 74, 18, 38))));
 
+        List<Integer> list = new ArrayList<Integer>(
+                Arrays.asList(1,2,5,3,7,8,6,4));
+
+        EnoughBribes.minimumBribes(list);
+
+                                                // 1,2,3,4,5,6,7,8
+                                                // 1,2,5,3,4,6,7,8
+                                                // 1,2,5,3,7,4,6,8
+                                                // 1,2,5,3,7,8,4,6
+                                                // 1,2,5,3,7,8,6,4
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class EnoughBribes {
+    public static void minimumBribes(List<Integer> q) {
+
+        int bribes = 0;
+
+        Map<Integer, Integer> mapPositions = new HashMap<>();
+
+        for(int i=0; i<q.size(); i++) {
+            mapPositions.put(i, q.get(i));
+        }
+
+        Collections.sort(q);
+
+        for(int i=0; i< q.size()-1; i++) {
+            int indexOriginal = q.indexOf(mapPositions.get(i));
+            if(Math.abs(i - indexOriginal)>2) {
+                System.out.println("Too chaotic");
+                return;
+            } else if(mapPositions.get(i) - q.get(i)<=0) {
+            } else {
+                bribes=bribes + Math.abs(i - indexOriginal);
+                q.remove(mapPositions.get(i));
+                q.add(i, mapPositions.get(i));
+            }
+        }
+
+        System.out.println(bribes);
+
+    }
+}
+
+class SetMismatch {
+    public int[] findErrorNums(int[] nums) {
+
+        Set<Integer> setCheck = new HashSet<>();
+        int[] result = new int[2];
+
+        for(int num : nums) {
+            if (!setCheck.add(num)) {
+                result[0] = num;
+            }
+        }
+
+        List<Integer> list = new ArrayList<>(setCheck);
+        Collections.sort(list);
+
+        for(int i=0; i<nums.length; i++) {
+            if(i+1== nums.length) {
+                result[1] = nums.length;
+                break;
+            } else if(list.get(i)-i != 1) {
+                result[1] = list.get(i)-i > 1 ? list.get(i)-1 : list.get(i)+1;
+                break;
+            }
+        }
+
+        return result;
+    }
+}
+
+class ReverseInteger {
+    public int reverse(int x) {
+
+        boolean negative = false;
+        String integer;
+        if(x<0) {
+            negative = true;
+            integer = String.valueOf(x).replace("-","");
+        } else {
+            integer = String.valueOf(x);
+        }
+        StringBuilder integerReversed = new StringBuilder();
+
+        if(negative) {
+            integerReversed.append("-");
+        }
+
+        for(int i = integer.length()-1; i>=0; i--) {
+            integerReversed.append(integer.charAt(i));
+        }
+
+        long convertedInteger = Long.parseLong(integerReversed.toString());
+
+        if(convertedInteger > Integer.MAX_VALUE || convertedInteger < Integer.MIN_VALUE) {
+            return 0;
+        }
+
+        return (int) convertedInteger;
+    }
 }
 
 class StairsWays {
