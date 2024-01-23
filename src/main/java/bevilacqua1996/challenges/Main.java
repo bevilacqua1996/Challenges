@@ -7,10 +7,10 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
 
-//        List<Integer> list = new ArrayList<Integer>(
-//                Arrays.asList(1,2,5,3,7,8,6,4));
-//
-//        EnoughBribes.minimumBribes(list);
+        List<Integer> list = new ArrayList<>(
+                Arrays.asList(1,2,5,3,7,8,6,4));
+
+        EnoughBribes.minimumBribes(list);
 
                                                 // 1,2,3,4,5,6,7,8
                                                 // 1,2,5,3,4,6,7,8
@@ -116,25 +116,18 @@ class EnoughBribes {
     public static void minimumBribes(List<Integer> q) {
 
         int bribes = 0;
+        int n = q.size();
 
-        Map<Integer, Integer> mapPositions = new HashMap<>();
-
-        for(int i=0; i<q.size(); i++) {
-            mapPositions.put(i, q.get(i));
-        }
-
-        Collections.sort(q);
-
-        for(int i=0; i< q.size()-1; i++) {
-            int indexOriginal = q.indexOf(mapPositions.get(i));
-            if(Math.abs(i - indexOriginal)>2) {
+        for(int i=0; i< n; i++) {
+            int indexOriginal = q.get(i) - 1;
+            if(indexOriginal - i>2) {
                 System.out.println("Too chaotic");
                 return;
-            } else if(mapPositions.get(i) - q.get(i)<=0) {
-            } else {
-                bribes=bribes + Math.abs(i - indexOriginal);
-                q.remove(mapPositions.get(i));
-                q.add(i, mapPositions.get(i));
+            }
+            for(int j=Math.max(0, indexOriginal-1); j<i; j++) {
+                if(q.get(j)>q.get(i)) {
+                    bribes++;
+                }
             }
         }
 
