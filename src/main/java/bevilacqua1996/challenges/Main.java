@@ -6,23 +6,110 @@ import java.util.*;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-//        System.out.println(JesseAndCookies.cookies(90, new ArrayList<Integer>(
-//                Arrays.asList(13, 47, 74, 12, 89, 74, 18, 38))));
 
-        List<Integer> list = new ArrayList<Integer>(
-                Arrays.asList(1,2,5,3,7,8,6,4));
-
-        EnoughBribes.minimumBribes(list);
+//        List<Integer> list = new ArrayList<Integer>(
+//                Arrays.asList(1,2,5,3,7,8,6,4));
+//
+//        EnoughBribes.minimumBribes(list);
 
                                                 // 1,2,3,4,5,6,7,8
                                                 // 1,2,5,3,4,6,7,8
                                                 // 1,2,5,3,7,4,6,8
                                                 // 1,2,5,3,7,8,4,6
                                                 // 1,2,5,3,7,8,6,4
+//        List<String> list = new ArrayList<String >(
+//                Arrays.asList("abc","ab","cd","efg","ef","gh"));
+
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class MaxLengthConcatenatedString {
+    public static int maxLength(List<String> arr) {
+        int subwordSize = 0;
+
+        arr.sort(Comparator.comparingInt(String::length));
+        Collections.reverse(arr);
+
+        for(int i=0; i<arr.size(); i++) {
+            Set<String> duplicatedChar = new HashSet<>();
+            StringBuilder subword = new StringBuilder();
+            boolean duplicated = false;
+            subword.append(arr.get(i));
+            for(int count = 0; count<subword.length(); count++) {
+                if(!duplicatedChar.add(String.valueOf(subword.charAt(count)))) {
+                    duplicated = true;
+                    break;
+                }
+            }
+            if(duplicated) {
+                continue;
+            }
+            subwordSize = Math.max(subwordSize, subword.length());
+            for(int j=0; j<arr.size(); j++) {
+                duplicatedChar = new HashSet<>();
+
+                subword.append(arr.get(j));
+                duplicated = checkCombinations(duplicatedChar, subword, arr, j);
+
+                StringBuilder optionalSubword = new StringBuilder(arr.get(i) + arr.get(j));
+
+                if(duplicated && subword.length()<(arr.get(i) + arr.get(j)).length()) {
+                    duplicatedChar = new HashSet<>();
+                    duplicated = checkCombinations(duplicatedChar, optionalSubword, arr, j);
+                } else {
+                    subwordSize = Math.max(subwordSize, subword.length());
+                    duplicatedChar = new HashSet<>();
+                    duplicated = checkCombinations(duplicatedChar, optionalSubword, arr, j);
+                }
+
+                if(duplicated) {
+                    continue;
+                }
+                subword = subword.length()>optionalSubword.length() ? subword : optionalSubword;
+                subwordSize = Math.max(subwordSize, subword.length());
+            }
+            subword = new StringBuilder(arr.get(i));
+            for(int j=i+1; j<arr.size(); j++) {
+                duplicatedChar = new HashSet<>();
+
+                subword.append(arr.get(j));
+                duplicated = checkCombinations(duplicatedChar, subword, arr, j);
+
+                StringBuilder optionalSubword = new StringBuilder(arr.get(i) + arr.get(j));
+
+                if(duplicated && subword.length()<(arr.get(i) + arr.get(j)).length()) {
+                    duplicatedChar = new HashSet<>();
+                    duplicated = checkCombinations(duplicatedChar, optionalSubword, arr, j);
+                } else {
+                    subwordSize = Math.max(subwordSize, subword.length());
+                    duplicatedChar = new HashSet<>();
+                    duplicated = checkCombinations(duplicatedChar, optionalSubword, arr, j);
+                }
+
+                if(duplicated) {
+                    continue;
+                }
+                subword = subword.length()>optionalSubword.length() ? subword : optionalSubword;
+                subwordSize = Math.max(subwordSize, subword.length());
+            }
+        }
+        return subwordSize;
+    }
+
+    private static boolean checkCombinations(Set<String> duplicatedChar, StringBuilder subword, List<String> arr, int j) {
+        boolean duplicated = false;
+        for(int count = 0; count<subword.length(); count++) {
+            if(!duplicatedChar.add(String.valueOf(subword.charAt(count)))) {
+                duplicated = true;
+                subword.replace(subword.length()-arr.get(j).length(),subword.length(), "");
+                break;
+            }
+        }
+        return duplicated;
+    }
 }
 
 class EnoughBribes {
@@ -178,11 +265,16 @@ class JesseAndCookies {
 
     public static int cookies(int k, List<Integer> A) {
 
-        Collections.sort(A);
+        PriorityQueue<Integer> queue = new PriorityQueue<>(A);
 
-        recursiveCall(k, A);
+        while(queue.peek()<k) {
+            if(queue.size()==1) {
+                break;
+            }
+            testSweetness(k, queue);
+        }
 
-        if(A.size()==1 && A.get(0)<k) {
+        if(queue.size()==1 && queue.peek()<k) {
             return -1;
         }
 
@@ -190,23 +282,13 @@ class JesseAndCookies {
 
     }
 
-    public static void recursiveCall(int k, List<Integer> sortedList) {
-        if(sortedList.size()==1) {
-            return;
-        } else if(sortedList.get(0)>=k && sortedList.get(1)>=k) {
-            return;
-        } else {
-            Integer newSweetness = sortedList.get(0) + sortedList.get(1)*2;
+    public static void testSweetness(int k, PriorityQueue<Integer> sortedList) {
 
-            sortedList.set(0, newSweetness);
-            sortedList.remove(1);
+        int newSweetness = sortedList.poll() + sortedList.poll()*2;
 
-            iterations++;
+        sortedList.offer(newSweetness);
 
-            Collections.sort(sortedList);
-
-            recursiveCall(k, sortedList);
-        }
+        iterations++;
 
     }
 }
