@@ -1,21 +1,58 @@
 package bevilacqua1996.challenges;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
 
-        int[] list1 = new int[]{2,1,5,0,4,6};
+        int[] list1 = new int[]{0};
 
-        System.out.println(TripletSequence.increasingTriplet(list1));
+        System.out.println(PlaceFlowers.canPlaceFlowers(list1, 1));
 
 
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class PlaceFlowers {
+    public static boolean canPlaceFlowers(int[] flowerbed, int n) {
+
+        if(flowerbed.length==1) {
+            if(flowerbed[0]==0 && n<=1) {
+                return true;
+            } else if(flowerbed[0] == 0) {
+                return false;
+            } else return flowerbed[0] == 1 && n == 0;
+        }
+
+
+        for(int i=0; i<flowerbed.length; i++) {
+            if(i==0 || i==flowerbed.length-1) {
+                if(i==0 && flowerbed[i]==0 && flowerbed[i+1]==0) {
+                    n--;
+                    flowerbed[i] = 1;
+                } else if(i==flowerbed.length-1 && flowerbed[i]==0 && flowerbed[i-1]==0) {
+                    n--;
+                    flowerbed[i] = 1;
+                }
+                continue;
+            }
+            if(flowerbed[i]==0 && flowerbed[i-1]==0 && flowerbed[i+1]==0) {
+                n--;
+                flowerbed[i] = 1;
+            } else if(flowerbed[i-1]==0) {
+                i++;
+            }
+        }
+
+        return n <= 0;
+
+    }
 }
 
 class TripletSequence {
