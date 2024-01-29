@@ -8,15 +8,69 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
 
-        int[] list1 = new int[]{0};
-
-        System.out.println(PlaceFlowers.canPlaceFlowers(list1, 1));
+        MyQueue obj = new MyQueue();
+        obj.push(1);
+        obj.push(2);
+        obj.push(3);
+        obj.push(4);
+        obj.pop();
+        obj.push(5);
+        obj.pop();
+        obj.pop();
+        obj.pop();
+        obj.pop();
+        boolean param_4 = obj.empty();
 
 
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class MyQueue {
+
+    public int head;
+    public MyQueue tail;
+
+    public MyQueue(int head, MyQueue tail) {
+        this.head = head;
+        this.tail = tail;
+    }
+
+    public MyQueue() {
+
+    }
+
+    public void push(int x) {
+        if(this.head==0) {
+            this.tail = new MyQueue(this.head, this.tail);
+            this.head = x;
+            return;
+        }
+        MyQueue newTail = this.tail;
+        while(newTail.head!=0) {
+            newTail = newTail.tail;
+        }
+        MyQueue lastTail = new MyQueue(newTail.head, newTail.tail);
+        newTail.head = x;
+        newTail.tail = lastTail;
+    }
+
+    public int pop() {
+        int returnNumber = this.head;
+        this.head = this.tail.head;
+        this.tail = this.tail.tail;
+        return returnNumber;
+    }
+
+    public int peek() {
+        return this.head;
+    }
+
+    public boolean empty() {
+        return this.tail==null && head==0;
+    }
 }
 
 class PlaceFlowers {
