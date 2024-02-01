@@ -8,12 +8,44 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println(Arrays.toString(WarmerTemperatures.dailyTemperatures(new int[]{73,74,75,71,69,72,76,73})));
+        System.out.println(Arrays.deepToString(DivideArray.divideArray(new int[]{6,10,5,12,7,11,6,6,12,12,11,7}, 2)));
 
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class DivideArray {
+    public static int[][] divideArray(int[] nums, int k) {
+
+        int matrixLength;
+
+        if(nums.length%3 != 0) {
+            return new int[][]{};
+        } else {
+            matrixLength = nums.length/3;
+        }
+
+        Arrays.sort(nums);
+
+        int[][] formedList = new int[matrixLength][3];
+        int countMax = 0;
+        for(int i=0; i<nums.length; i++) {
+            if(nums[i+1] - nums[i] <= k && nums[i+2] - nums[i]<=k) {
+                formedList[countMax][0] = nums[i];
+                formedList[countMax][1] = nums[i+1];
+                formedList[countMax][2] = nums[i+2];
+                i = i+2;
+                countMax++;
+            } else {
+                return new int[][]{};
+            }
+        }
+
+        return formedList;
+
+    }
 }
 
 class WarmerTemperatures {
