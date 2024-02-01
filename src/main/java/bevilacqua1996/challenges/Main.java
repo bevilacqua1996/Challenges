@@ -8,24 +8,59 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
 
-        MyQueue obj = new MyQueue();
-        obj.push(1);
-        obj.push(2);
-        obj.push(3);
-        obj.push(4);
-        obj.pop();
-        obj.push(5);
-        obj.pop();
-        obj.pop();
-        obj.pop();
-        obj.pop();
-        boolean param_4 = obj.empty();
-
+        System.out.println(Arrays.toString(WarmerTemperatures.dailyTemperatures(new int[]{73,74,75,71,69,72,76,73})));
 
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class WarmerTemperatures {
+    public static int[] dailyTemperatures(int[] temperatures) {
+        int n = temperatures.length;
+        int[] answer = new int[n];
+        Stack<Integer> stack = new Stack<>();
+
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && temperatures[i] > temperatures[stack.peek()]) {
+                int index = stack.pop();
+                answer[index] = i - index;
+            }
+            stack.push(i);
+        }
+
+        return answer;
+
+    }
+}
+
+class FindDifference {
+    public static List<List<Integer>> findDifference(int[] nums1, int[] nums2) {
+
+        List<Integer> answer1 = new ArrayList<>();
+
+        Set<Integer> nums1Set = Arrays.stream(nums1)
+                .boxed()
+                .collect(Collectors.toSet());
+
+        Set<Integer> nums2Set = Arrays.stream(nums2)
+                .boxed()
+                .collect(Collectors.toSet());
+
+
+        for(Integer nums1Value : nums1Set) {
+            if(nums2Set.contains(nums1Value)) {
+                nums2Set.remove(nums1Value);
+                continue;
+            } else {
+                answer1.add(nums1Value);
+            }
+        }
+
+        return List.of(answer1, new ArrayList<>(nums2Set));
+
+    }
 }
 
 class MyQueue {
