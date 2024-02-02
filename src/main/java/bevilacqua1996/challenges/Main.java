@@ -8,12 +8,44 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println(Arrays.deepToString(DivideArray.divideArray(new int[]{6,10,5,12,7,11,6,6,12,12,11,7}, 2)));
+        System.out.println(SequentialDigits.sequentialDigits(234, 2314));
 
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class SequentialDigits {
+    public static List<Integer> sequentialDigits(int low, int high) {
+        int lowLength = (int) (Math.log10(low) + 1);
+        int highLength = (int) (Math.log10(high) + 1);
+
+        List<Integer> answer = new ArrayList<>();
+
+        int lenght = lowLength;
+
+        while(lenght<=highLength) {
+            for(int i = 1; i<=10-lenght; i++) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(i);
+                int j = i+1;
+                while (stringBuilder.length()<lenght) {
+                    stringBuilder.append(j);
+                    j++;
+                }
+                int candidate = Integer.parseInt(stringBuilder.toString());
+                if(candidate>=low && candidate<=high) {
+                    answer.add(candidate);
+                }
+            }
+            lenght++;
+
+        }
+
+        return answer;
+
+    }
 }
 
 class DivideArray {
