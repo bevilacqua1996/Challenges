@@ -8,12 +8,46 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println(SequentialDigits.sequentialDigits(234, 2314));
+        System.out.println(GroupAnagrams.groupAnagrams(new String[]{"eat","tea","tan","ate","nat","bat"}));
 
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class GroupAnagrams {
+    public static List<List<String>> groupAnagrams(String[] strs) {
+        List<String> listStrings = new ArrayList<>(Arrays.asList(strs));
+        List<String> anagrams;
+        List<List<String>> anagramsList = new ArrayList<>();
+        while(!listStrings.isEmpty()) {
+            anagrams = new ArrayList<>();
+            String stringToCompare = listStrings.get(0);
+            listStrings.remove(0);
+            anagrams.add(stringToCompare);
+            List<String> copyListString = new ArrayList<>(List.copyOf(listStrings));
+            for(int i=0; i<listStrings.size(); i++) {
+                String anotherStringToCompare = listStrings.get(i);
+                if(stringToCompare.length() != anotherStringToCompare.length()) {
+                    continue;
+                }
+                char[] compare1 = stringToCompare.toCharArray();
+                char[] compare2 = anotherStringToCompare.toCharArray();
+                Arrays.sort(compare1);
+                Arrays.sort(compare2);
+                String convertedStringToCompare = new String(compare1);
+                String convertedAnotherStringToCompare = new String(compare2);
+                if(convertedStringToCompare.equals(convertedAnotherStringToCompare)) {
+                    anagrams.add(anotherStringToCompare);
+                    copyListString.remove(anotherStringToCompare);
+                }
+            }
+            listStrings = new ArrayList<>(copyListString);
+            anagramsList.add(anagrams);
+        }
+        return anagramsList;
+    }
 }
 
 class SequentialDigits {
