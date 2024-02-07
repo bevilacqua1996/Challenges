@@ -8,12 +8,150 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println(GroupAnagrams.groupAnagrams(new String[]{"eat","tea","tan","ate","nat","bat"}));
+        System.out.println(Subsequence.isSubsequence("aaaaaa", "bbaaaa"));
 
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class Subsequence {
+    public static boolean isSubsequence(String s, String t) {
+        StringBuilder newT = new StringBuilder(t);
+        StringBuilder answer = new StringBuilder();
+        if(t.contains(s)) {
+            return true;
+        }
+        for(int i=0; i<s.length(); i++) {
+            while(newT.length()!=0 && s.charAt(i) != newT.charAt(0)) {
+                newT.deleteCharAt(0);
+            }
+            if(newT.length()!=0) {
+                answer.append(newT.charAt(0));
+                newT.deleteCharAt(0);
+            }
+        }
+
+        return answer.toString().equals(s);
+
+    }
+}
+
+class FrequencySort {
+    public static String frequencySort(String s) {
+        Set<Character> characters = new HashSet<>();
+        StringBuilder answer = new StringBuilder();
+        for(int i=0; i<s.length(); i++) {
+            characters.add(s.charAt(i));
+        }
+
+        List<String> listString = new ArrayList<>();
+
+        for(Character character : characters) {
+            StringBuilder key = new StringBuilder();
+            for(int i=0; i<s.length(); i++) {
+                if(character.equals(s.charAt(i))) {
+                    key.append(s.charAt(i));
+                }
+            }
+            listString.add(key.toString());
+        }
+
+        listString.sort(Comparator.comparing(String::length).reversed());
+
+        for(String substring : listString) {
+            answer.append(substring);
+        }
+
+        return answer.toString();
+
+    }
+}
+
+class HighestAltitude {
+    public static int largestAltitude(int[] gain) {
+        int altitude = 0;
+        int maximumAltitude = altitude;
+        for(int i=0; i<gain.length; i++) {
+            altitude+=gain[i];
+            if(maximumAltitude<altitude) {
+                maximumAltitude = altitude;
+            }
+        }
+
+        return maximumAltitude;
+    }
+}
+
+class StringCompression {
+    public static int compress(char[] chars) {
+        StringBuilder answer = new StringBuilder();
+        int counter = 1;
+
+        if(chars.length==1) {
+            return 1;
+        }
+
+        for(int i=1; i<chars.length; i++) {
+            if(i == chars.length-1) {
+                if(chars[i]!=chars[i-1]) {
+                   if(counter==1) {
+                       answer.append(chars[i - 1]);
+                       answer.append(chars[i]);
+                   } else {
+                       answer.append(chars[i - 1]).append(counter);
+                       answer.append(chars[i]);
+                   }
+                } else {
+                    counter++;
+                    answer.append(chars[i - 1]).append(counter);
+                }
+                continue;
+            }
+            if(chars[i]==chars[i-1]) {
+                counter++;
+            } else {
+                if(counter==1) {
+                    answer.append(chars[i-1]);
+                    continue;
+                }
+                answer.append(chars[i - 1]).append(counter);
+                counter = 1;
+            }
+        }
+
+        for(int i=0; i<answer.length(); i++) {
+            chars[i] = answer.charAt(i);
+        }
+
+        System.out.println(chars);
+
+        return answer.length();
+
+    }
+}
+
+class Candies {
+    public static List<Boolean> kidsWithCandies(int[] candies, int extraCandies) {
+        List<Boolean> answer = new ArrayList<>();
+        for(int i=0; i<candies.length; i++) {
+            int candidate = candies[i] + extraCandies;
+            boolean isGreatestNumber = true;
+            for(int j=0; j<candies.length; j++) {
+                if(j==i) {
+                    continue;
+                }
+                if(candies[j] > candidate) {
+                    isGreatestNumber = false;
+                    break;
+                }
+            }
+            answer.add(isGreatestNumber);
+        }
+
+        return answer;
+    }
 }
 
 class GroupAnagrams {
