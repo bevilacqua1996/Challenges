@@ -8,12 +8,218 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println(Subsequence.isSubsequence("aaaaaa", "bbaaaa"));
+        System.out.println(TeamsTopics.acmTeam(List.of("10101", "11100", "11010", "00101")));
 
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class TeamsTopics {
+    public static List<Integer> acmTeam(List<String> topic) {
+        // Write your code here
+
+        int maxNumberOfTopics = 0;
+        int teamsWithMaxNumberOfTopics = 0;
+
+        for(int i=0; i<topic.size(); i++) {
+            for(int j=i+1; j<topic.size(); j++) {
+                int teamTopics = 0;
+                for(int q=0; q<topic.get(i).length(); q++) {
+                    if(topic.get(i).charAt(q)=='1') {
+                        teamTopics++;
+                    } else {
+                        if(topic.get(j).charAt(q)=='1') {
+                            teamTopics++;
+                        }
+                    }
+                }
+                if(maxNumberOfTopics == teamTopics) {
+                    teamsWithMaxNumberOfTopics++;
+                } else if(teamTopics>maxNumberOfTopics) {
+                    maxNumberOfTopics = teamTopics;
+                    teamsWithMaxNumberOfTopics = 1;
+                }
+            }
+        }
+
+        return Arrays.asList(maxNumberOfTopics,teamsWithMaxNumberOfTopics);
+
+    }
+}
+
+class QueensAttack {
+
+    public static int queensAttack(int n, int k, int r_q, int c_q, List<List<Integer>> obstacles) {
+        // Criar um conjunto para armazenar os obstáculos
+        Set<List<Integer>> obstacleSet = new HashSet<>(obstacles);
+
+        int count = 0;
+
+        for (int i = r_q + 1; i <= n && !obstacleSet.contains(List.of(i, c_q)); i++) {
+            count++;
+        }
+
+        for (int i = r_q - 1; i > 0 && !obstacleSet.contains(List.of(i, c_q)); i--) {
+            count++;
+        }
+
+        for (int i = c_q - 1; i > 0 && !obstacleSet.contains(List.of(r_q, i)); i--) {
+            count++;
+        }
+
+        for (int i = c_q + 1; i <= n && !obstacleSet.contains(List.of(r_q, i)); i++) {
+            count++;
+        }
+
+        int row_move = r_q + 1;
+        int column_move = c_q + 1;
+        while (row_move <= n && column_move <= n && !obstacleSet.contains(List.of(row_move, column_move))) {
+            count++;
+            row_move++;
+            column_move++;
+        }
+
+        row_move = r_q + 1;
+        column_move = c_q - 1;
+        while (row_move <= n && column_move > 0 && !obstacleSet.contains(List.of(row_move, column_move))) {
+            count++;
+            row_move++;
+            column_move--;
+        }
+
+        row_move = r_q - 1;
+        column_move = c_q - 1;
+        while (row_move > 0 && column_move > 0 && !obstacleSet.contains(List.of(row_move, column_move))) {
+            count++;
+            row_move--;
+            column_move--;
+        }
+
+        row_move = r_q - 1;
+        column_move = c_q + 1;
+        while (row_move > 0 && column_move <= n && !obstacleSet.contains(List.of(row_move, column_move))) {
+            count++;
+            row_move--;
+            column_move++;
+        }
+
+        return count;
+    }
+
+}
+
+class NonDivisible {
+    public static int nonDivisibleSubset(int k, List<Integer> s) {
+        int[] remainders = new int[k];
+
+        for(Integer integer : s) {
+            remainders[integer%k]++;
+        }
+
+        int count = 0;
+
+        for(int j=1; j<=(k/2); j++) {
+            if(j == k-j) {
+                count++;
+                continue;
+            }
+
+            count+=Math.max(remainders[j], remainders[k-j]);
+        }
+
+        if(remainders[0]>0) {
+            count++;
+        }
+
+        return count;
+
+    }
+}
+
+class CloseString {
+    public static boolean closeStrings(String word1, String word2) {
+        if(word1.length() != word2.length()) {
+            return false;
+        }
+        for(int i=0; i<word1.length(); i++) {
+            if(!word2.contains(String.valueOf(word1.charAt(i)))) {
+                return false;
+            }
+        }
+        for(int i=0; i<word2.length(); i++) {
+            if(!word1.contains(String.valueOf(word2.charAt(i)))) {
+                return false;
+            }
+        }
+        char[] word1Array = word1.toCharArray();
+        Arrays.sort(word1Array);
+        char[] word2Array = word2.toCharArray();
+        Arrays.sort(word2Array);
+
+        int counterFrequency = 1;
+        List<Integer> listFrequencyWord1 = new ArrayList<>();
+
+        for(int i=1; i< word1Array.length; i++) {
+            if(i==word1Array.length-1) {
+                if(word1Array[i-1]!=word1Array[i]) {
+                    listFrequencyWord1.add(counterFrequency);
+                    counterFrequency=1;
+                    listFrequencyWord1.add(counterFrequency);
+                } else {
+                    counterFrequency++;
+                    listFrequencyWord1.add(counterFrequency);
+                    counterFrequency=1;
+                }
+                continue;
+            }
+            if(word1Array[i-1]!=word1Array[i]) {
+                listFrequencyWord1.add(counterFrequency);
+                counterFrequency=1;
+            } else {
+                counterFrequency++;
+            }
+        }
+
+        List<Integer> listFrequencyWord2 = new ArrayList<>();
+
+        for(int i=1; i< word2Array.length; i++) {
+            if(i==word2Array.length-1) {
+                if(word2Array[i-1]!=word2Array[i]) {
+                    listFrequencyWord2.add(counterFrequency);
+                    counterFrequency=1;
+                    listFrequencyWord2.add(counterFrequency);
+                } else {
+                    counterFrequency++;
+                    listFrequencyWord2.add(counterFrequency);
+                    counterFrequency=1;
+                }
+                continue;
+            }
+            if(word2Array[i-1]!=word2Array[i]) {
+                listFrequencyWord2.add(counterFrequency);
+                counterFrequency=1;
+            } else {
+                counterFrequency++;
+            }
+        }
+
+        if(listFrequencyWord1.size()!=listFrequencyWord2.size()) {
+            return false;
+        }
+
+        Collections.sort(listFrequencyWord1);
+        Collections.sort(listFrequencyWord2);
+
+        for(int i=0; i<listFrequencyWord1.size(); i++) {
+            if(!Objects.equals(listFrequencyWord1.get(i), listFrequencyWord2.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
 
 class Subsequence {
