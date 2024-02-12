@@ -8,12 +8,118 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println(TeamsTopics.acmTeam(List.of("10101", "11100", "11010", "00101")));
+        System.out.println(KthLargest.findKthLargest(new int[]{3,2,1,5,6,4}, 2));
 
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class KthLargest {
+    public static int findKthLargest(int[] nums, int k) {
+        PriorityQueue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder());
+
+        for (int num : nums) {
+            queue.add(num);
+        }
+
+        int counter = 1;
+
+        while(counter!=k) {
+            queue.poll();
+            counter++;
+        }
+
+        return queue.peek();
+    }
+}
+
+class MajorityNumber {
+    public int majorityElement(int[] nums) {
+        Set<Integer> setNumbersOnArray = Arrays.stream(nums)
+                .boxed().collect(Collectors.toSet());
+        int frequency;
+        int maxFrequency = 0;
+        int majorityElement = 0;
+
+        for(Integer numberOnSet : setNumbersOnArray) {
+            frequency=0;
+            for (int num : nums) {
+                if (num == numberOnSet) {
+                    frequency++;
+                }
+            }
+            if(maxFrequency<frequency) {
+                maxFrequency = frequency;
+                majorityElement = numberOnSet;
+            }
+        }
+
+        return majorityElement;
+    }
+}
+
+class BiggerIsGreater {
+    public static String biggerIsGreater(String w) {
+        String substring = "";
+        boolean hasAnswer = false;
+
+        int indexForSubstring = 0;
+
+        for(int i=w.length()-1; i>0; i--) {
+            if(w.charAt(i)>w.charAt(i-1)) {
+                indexForSubstring = i-1;
+                substring += w.substring(indexForSubstring);
+                hasAnswer = true;
+                break;
+            }
+        }
+
+        if(!hasAnswer) {
+            return "no answer";
+        }
+
+        int nearCharacterIndex = 0;
+        int lastDifferenceBetweenCharacters = 0;
+
+        for(int i=1; i<substring.length(); i++) {
+            if(substring.charAt(i)>substring.charAt(0)) {
+                if(lastDifferenceBetweenCharacters==0) {
+                    lastDifferenceBetweenCharacters = substring.charAt(i) - substring.charAt(0);
+                    nearCharacterIndex = i;
+                } else {
+                    if((substring.charAt(i) - substring.charAt(0)<lastDifferenceBetweenCharacters)) {
+                        lastDifferenceBetweenCharacters = substring.charAt(i) - substring.charAt(0);
+                        nearCharacterIndex = i;
+                    }
+                }
+            }
+        }
+
+        char[] ch = substring.toCharArray();
+        ch[0] = (char)(ch[0] ^ ch[nearCharacterIndex]);
+        ch[nearCharacterIndex] = (char)(ch[0] ^ ch[nearCharacterIndex]);
+        ch[0] = (char)(ch[0] ^ ch[nearCharacterIndex]);
+
+        String newString = String.valueOf(ch);
+
+        char[] chSorted = new char[newString.length()-1];
+
+        for(int i=0; i<chSorted.length; i++) {
+            chSorted[i] = newString.charAt(i+1);
+        }
+
+        Arrays.sort(chSorted);
+
+        String newStringSorted = newString.charAt(0) + String.valueOf(chSorted);
+
+        StringBuilder stringBuilder = new StringBuilder(w);
+        stringBuilder.replace(indexForSubstring, w.length(), newStringSorted);
+
+        return stringBuilder.toString();
+
+    }
 }
 
 class TeamsTopics {
@@ -1205,9 +1311,9 @@ class UniqueOccurrences {
 
 class RandomizedCollection {
 
-    private Map<Integer, Integer> mapToCount;
-    private List<Integer> list;
-    private Random random;
+    private final Map<Integer, Integer> mapToCount;
+    private final List<Integer> list;
+    private final Random random;
 
     public RandomizedCollection() {
         this.list = new ArrayList<>();
@@ -1252,8 +1358,8 @@ class RandomizedCollection {
 
 class RandomizedSet {
 
-    private Set<Integer> set;
-    private Random random;
+    private final Set<Integer> set;
+    private final Random random;
     private Integer[] arrayNumbers;
 
     public RandomizedSet() {
