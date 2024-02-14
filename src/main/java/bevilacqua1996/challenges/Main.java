@@ -8,12 +8,49 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println(KthLargest.findKthLargest(new int[]{3,2,1,5,6,4}, 2));
+        System.out.println(FindPalindrome.firstPalindrome(new String[]{"abc","car","ada","racecar","cool"}));
 
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class RearrangeArrays {
+    public int[] rearrangeArray(int[] nums) {
+        List<Integer> positiveNumbers = Arrays.stream(nums).filter((num) -> num>0).boxed().collect(Collectors.toList());
+        List<Integer> negativeNumbers = Arrays.stream(nums).filter((num) -> num<0).boxed().collect(Collectors.toList());
+
+        int[] rearrangedArray = new int[positiveNumbers.size()*2];
+        int count = 0;
+
+        for(int i=0; i<rearrangedArray.length; i+=2) {
+            rearrangedArray[i] = positiveNumbers.get(count);
+            rearrangedArray[i+1] = negativeNumbers.get(count);
+            count++;
+        }
+
+        return rearrangedArray;
+
+    }
+}
+
+class FindPalindrome {
+    public static String firstPalindrome(String[] words) {
+        Optional<String> palindrome = Arrays.stream(words).filter((word) -> {
+            for(int i=0; i<word.length(); i++) {
+                char start = word.charAt(i);
+                char end = word.charAt(word.length()-i-1);
+                if(start!=end) {
+                    return false;
+                }
+            }
+            return true;
+        }).findFirst();
+
+        return palindrome.orElse("");
+
+    }
 }
 
 class KthLargest {
