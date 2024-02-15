@@ -8,12 +8,147 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println(FindPalindrome.firstPalindrome(new String[]{"abc","car","ada","racecar","cool"}));
+        System.out.println(Perimeter.largestPerimeter(new int[]{1,12,1,2,5,50,3}));
 
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class Perimeter{
+    public static long largestPerimeter(int[] nums) {
+        List<Integer> listNums = Arrays.stream(nums).boxed().sorted().collect(Collectors.toList());
+
+        long answer = -1;
+
+        while(listNums.size()>=3) {
+            long maxLength = listNums.get(listNums.size()-1);
+            long sumOfLengths = listNums.stream().
+                    limit(listNums.size()-1).
+                    mapToLong(a -> a).
+                    reduce(0, Long::sum);
+
+            if(sumOfLengths > maxLength) {
+                answer = sumOfLengths + maxLength;
+                break;
+            } else {
+                listNums.remove(listNums.size()-1);
+            }
+
+        }
+
+        return answer;
+    }
+}
+
+class SummaryRanges {
+    public static List<String> summaryRanges(int[] nums) {
+
+        List<String> answer = new ArrayList<>();
+
+        if(nums.length==1) {
+            answer.add(String.valueOf(nums[0]));
+            return answer;
+        }
+
+        for(int i=0; i<nums.length; i++) {
+            for(int j=i+1; j<nums.length; j++) {
+                if(j==nums.length-1) {
+                    if(Math.abs(nums[j]-nums[j-1])>1) {
+                        if(j-i==1) {
+                            answer.add(String.valueOf(nums[i]));
+                            answer.add(String.valueOf(nums[j]));
+                            i=j;
+                            break;
+                        } else {
+                            answer.add(nums[i] + "->" + nums[j-1]);
+                            answer.add(String.valueOf(nums[j]));
+                            i=j;
+                            break;
+                        }
+                    } else {
+                        answer.add(nums[i] + "->" + nums[j]);
+                        i=j;
+                        break;
+                    }
+                }
+                if(Math.abs(nums[j]-nums[j-1])>1) {
+                    if(j-i==1) {
+                        answer.add(String.valueOf(nums[i]));
+                        i = j-1;
+                        break;
+                    } else {
+                        answer.add(nums[i] + "->" + nums[j-1]);
+                        i = j-1;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return answer;
+
+    }
+}
+
+class WordPattern {
+    public boolean wordPattern(String pattern, String s) {
+        String[] words = s.split(" ");
+        char[] patternArray = pattern.toCharArray();
+
+        Map<Character, String> mapStringsPattern = new HashMap<>();
+
+        if(words.length!=patternArray.length) {
+            return false;
+        }
+
+        for(int i=0; i<words.length; i++) {
+            if(mapStringsPattern.containsKey(patternArray[i])) {
+                String wordOfPattern = mapStringsPattern.get(patternArray[i]);
+                if(!wordOfPattern.equals(words[i])) {
+                    return false;
+                }
+            }
+            mapStringsPattern.put(patternArray[i], words[i]);
+        }
+
+        Set<String> setString = Arrays.stream(words).collect(Collectors.toSet());
+
+        return mapStringsPattern.values().size() == setString.size();
+    }
+}
+
+class TwoSum {
+    public int[] twoSum(int[] numbers, int target) {
+        int i=0;
+        int j=numbers.length-1;
+        int mid = 0;
+        int[] answer = new int[2];
+        while(i<=j) {
+            mid=(i+j)/2;
+            int sum = numbers[i] + numbers[j];
+            if(sum == target) {
+                answer[0] = i+1;
+                answer[1] = j+1;
+                break;
+            } else if(sum>target) {
+                if(numbers[i]+numbers[mid]>target) {
+                    j = mid-1;
+                } else {
+                    j--;
+                }
+            } else {
+                if(numbers[j] + numbers[mid]<target) {
+                    i = mid+1;
+                } else {
+                    i++;
+                }
+            }
+        }
+
+        return answer;
+    }
 }
 
 class RearrangeArrays {
