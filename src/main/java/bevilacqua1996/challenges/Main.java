@@ -1,6 +1,7 @@
 package bevilacqua1996.challenges;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -8,12 +9,76 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println(Perimeter.largestPerimeter(new int[]{1,12,1,2,5,50,3}));
+        System.out.println(LeastNumber.findLeastNumOfUniqueInts(new int[]{2,1,1,3,3,3}, 3));
 
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class LeastNumber {
+    public static int findLeastNumOfUniqueInts(int[] arr, int k) {
+        Map<Integer, Long> mapFrequency = Arrays.stream(arr)
+                .boxed()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        List<Map.Entry<Integer, Long> > listMap
+                = new LinkedList<>(
+                mapFrequency.entrySet());
+
+        // Sort the list using lambda expression
+        listMap.sort(Map.Entry.comparingByValue());
+
+        HashMap<Integer, Long> temp
+                = new LinkedHashMap<>();
+        for (Map.Entry<Integer, Long> entry : listMap) {
+            temp.put(entry.getKey(), entry.getValue());
+        }
+
+        while(k>0) {
+            for (Map.Entry<Integer, Long> entry : temp.entrySet()) {
+                long value = entry.getValue();
+                if (value > k) {
+                    entry.setValue(value - k);
+                    k = 0;
+                } else {
+                    k -= (int) value;
+                    entry.setValue(0L);
+                }
+
+                if (k == 0) {
+                    break;
+                }
+            }
+        }
+
+        return (int) temp.values().stream().filter((a) -> a>0).count();
+
+    }
+}
+
+class CutTheSticks {
+    public static List<Integer> cutTheSticks(List<Integer> arr) {
+        List<Integer> remains = new ArrayList<>();
+        remains.add(arr.size());
+
+        List<Integer> iterationRemains = new ArrayList<>(arr);
+
+        while(iterationRemains.size()>1) {
+            int min = Collections.min(iterationRemains);
+            iterationRemains = iterationRemains.stream().
+                    filter((a) -> a>min).
+                    map((a) -> a-min).
+                    collect(Collectors.toList());
+            if(iterationRemains.isEmpty()) {
+                break;
+            }
+            remains.add(iterationRemains.size());
+        }
+
+        return remains;
+    }
 }
 
 class Perimeter{
