@@ -9,12 +9,47 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println(LeastNumber.findLeastNumOfUniqueInts(new int[]{2,1,1,3,3,3}, 3));
+        System.out.println(RemovingDuplicates.removeDuplicates(new int[]{-1,0,0,0,0,3,3}));
 
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class RemovingDuplicates {
+    public static int removeDuplicates(int[] nums) {
+        List<Integer> listNums = Arrays.stream(nums).boxed().collect(Collectors.toList());
+        Map<Integer, Long> mapFrequency = listNums.stream().
+                collect(Collectors.groupingBy(
+                    Function.identity(),
+                    Collectors.counting()
+        )).entrySet().stream().
+                sorted(Map.Entry.comparingByKey()).
+                collect(
+                        Collectors.toMap(
+                            Map.Entry::getKey,
+                            Map.Entry::getValue,
+                            (oldValue, newValue) -> oldValue,
+                            LinkedHashMap::new));
+
+        int count=0;
+        for(Map.Entry<Integer, Long> entry : mapFrequency.entrySet()) {
+            if(entry.getValue()>=2) {
+                nums[count] = entry.getKey();
+                nums[count+1] = entry.getKey();
+                count+=2;
+            } else {
+                nums[count] = entry.getKey();
+                count++;
+            }
+        }
+
+        System.out.println(Arrays.toString(nums));
+
+        return count;
+
+    }
 }
 
 class MissingNumber {
