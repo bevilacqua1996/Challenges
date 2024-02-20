@@ -17,6 +17,19 @@ public class Main {
 
 }
 
+class MissingNumber {
+    public static int missingNumber(int[] nums) {
+        Arrays.sort(nums);
+        for(int i=0; i<nums.length; i++) {
+            if(nums[i]!=i) {
+                return i;
+            }
+        }
+
+        return nums.length;
+    }
+}
+
 class LeastNumber {
     public static int findLeastNumOfUniqueInts(int[] arr, int k) {
         Map<Integer, Long> mapFrequency = Arrays.stream(arr)
