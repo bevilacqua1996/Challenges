@@ -9,12 +9,41 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println(TownJudge.findJudge(7, new int[][]{{7,3},{1,3},{5,6},{2,1},{1,6},{3,7},{7,2},{1,2},{7,6},{6,3},{3,6},{5,7},{5,3},{6,4},{5,4},{2,6},{7,1},{1,4},{2,3},{6,5},{3,5},{3,4},{3,1},{7,4},{5,2},{2,4}}));
+        System.out.println(Arrays.toString(ProductOfArray.productExceptSelf(new int[]{1, 2, 3, 4})));
 
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class ProductOfArray {
+    public static int[] productExceptSelf(int[] nums) {
+        int lenght = nums.length;
+        int[] answer = new int[lenght];
+
+        int[] leftProduct = new int[lenght];
+        int[] rightProduct = new int[lenght];
+
+        int leftProductInitial = 1;
+        for(int i=0; i<lenght; i++) {
+            leftProduct[i] = leftProductInitial;
+            leftProductInitial*=nums[i];
+        }
+
+        int rightProductInitial = 1;
+        for(int j=lenght-1; j>=0; j--) {
+            rightProduct[j]=rightProductInitial;
+            rightProductInitial*=nums[j];
+        }
+
+        for(int h=0; h<lenght; h++) {
+            answer[h] = rightProduct[h]*leftProduct[h];
+        }
+
+        return answer;
+
+    }
 }
 
 class TownJudge {
