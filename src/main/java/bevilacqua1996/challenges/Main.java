@@ -9,12 +9,52 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println(RemovingDuplicates.removeDuplicates(new int[]{-1,0,0,0,0,3,3}));
+        System.out.println(TownJudge.findJudge(7, new int[][]{{7,3},{1,3},{5,6},{2,1},{1,6},{3,7},{7,2},{1,2},{7,6},{6,3},{3,6},{5,7},{5,3},{6,4},{5,4},{2,6},{7,1},{1,4},{2,3},{6,5},{3,5},{3,4},{3,1},{7,4},{5,2},{2,4}}));
 
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
     }
 
+}
+
+class TownJudge {
+    public static int findJudge(int n, int[][] trust) {
+        if(n==1) {
+            return 1;
+        } else if(trust.length==0) {
+            return -1;
+        }
+
+        Set<Integer> peopleToBeTrusted = new HashSet<>();
+        List<Integer> judges = new ArrayList<>();
+
+        for (int[] value : trust) {
+            peopleToBeTrusted.add(value[1]);
+        }
+
+        for(Integer possibleJudge : peopleToBeTrusted) {
+            int count=0;
+            for (int[] ints : trust) {
+                if (possibleJudge == ints[0]) {
+                    count = 0;
+                    break;
+                }
+                if (ints[1] == possibleJudge) {
+                    count++;
+                }
+            }
+            if(count==n-1) {
+                judges.add(possibleJudge);
+            }
+        }
+
+        if(judges.size() != 1) {
+            return -1;
+        }
+
+        return judges.get(0);
+
+    }
 }
 
 class RemovingDuplicates {
